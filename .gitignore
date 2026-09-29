@@ -1,0 +1,12 @@
+# Private applicant inputs and generated correspondence
+profiles/
+private/
+outputs/
+*.local.json
+*.local.yaml
+*.local.yml
+.env
+
+# Generated Python artifacts
+__pycache__/
+*.py[cod]
