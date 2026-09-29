@@ -16,6 +16,39 @@ CN_ID_RE = re.compile(r"(?<!\d)\d{17}[\dXx](?!\d)")
 URL_RE = re.compile(r"(?i)https?://|www\.")
 ZERO_WIDTH_RE = re.compile("[\u200b\u200c\u200d\ufeff]")
 FIT_LABELS = {"direct", "adjacent", "exploratory"}
+FIXED_LONG_ROLES = [
+    "salutation",
+    "courtesy",
+    "identity",
+    "professor_hook",
+    "personal_fit",
+    "basic_intro",
+    "basic_academic",
+    "basic_courses",
+    "basic_language",
+    "basic_honors",
+    "basic_competitions",
+    "research_heading",
+    "research_a",
+    "research_b",
+    "research_c",
+    "internship",
+    "closing",
+    "wishes",
+    "valediction",
+    "signature_name",
+    "signature_affiliation",
+    "signature_email",
+    "signature_phone",
+    "signature_date",
+]
+OPTIONAL_FIXED_LONG_ROLES = {
+    "research_b",
+    "research_c",
+    "signature_email",
+    "signature_phone",
+    "signature_date",
+}
 
 
 def fail(errors):
@@ -53,6 +86,10 @@ def load_artifact(path):
         if not isinstance(items, list) or not items:
             raise ValueError("artifact JSON must contain a non-empty paragraphs array")
         paragraphs = [paragraph_text(item).strip() for item in items]
+        metadata["_paragraph_roles"] = [
+            item.get("role") if isinstance(item, dict) else None
+            for item in items
+        ]
     elif suffix == ".docx":
         try:
             from docx import Document
@@ -145,8 +182,42 @@ def validate_artifact(paragraphs, metadata, profile=None, min_length=None, max_l
         errors.append("email contains a citation marker")
 
     titles = re.findall(r"《([^》]+)》", text)
-    if len(titles) > 1:
-        errors.append(f"email names {len(titles)} hook papers; expected at most one")
+
+    template_format = metadata.get("template_format")
+    if template_format == "fixed-long":
+        roles = metadata.get("_paragraph_roles", [])
+        if not roles or any(not isinstance(role, str) or not role for role in roles):
+            errors.append("fixed-long JSON paragraphs must each include a non-empty role")
+        else:
+            unknown = [role for role in roles if role not in FIXED_LONG_ROLES]
+            duplicates = sorted({role for role in roles if roles.count(role) > 1})
+            if unknown:
+                errors.append(f"fixed-long artifact has unknown roles: {', '.join(unknown)}")
+            if duplicates:
+                errors.append(f"fixed-long artifact repeats roles: {', '.join(duplicates)}")
+            omitted = [role for role in FIXED_LONG_ROLES if role not in roles]
+            invalid_omissions = [role for role in omitted if role not in OPTIONAL_FIXED_LONG_ROLES]
+            if invalid_omissions:
+                errors.append(
+                    "fixed-long artifact is missing required roles: "
+                    + ", ".join(invalid_omissions)
+                )
+            expected = [role for role in FIXED_LONG_ROLES if role in roles]
+            if roles != expected:
+                errors.append("fixed-long paragraph roles are out of order")
+        hook_paragraphs = [
+            paragraph
+            for paragraph, role in zip(paragraphs, roles)
+            if role == "professor_hook"
+        ]
+        if len(hook_paragraphs) == 1:
+            sentence_count = len(re.findall(r"[。！？!?]", hook_paragraphs[0]))
+            if sentence_count != 4:
+                errors.append(
+                    f"fixed-long professor_hook must contain exactly four sentences; found {sentence_count}"
+                )
+    elif template_format is not None:
+        errors.append("metadata.template_format must be fixed-long when provided")
 
     professor_name = metadata.get("professor_name")
     if professor_name is not None:
@@ -159,8 +230,16 @@ def validate_artifact(paragraphs, metadata, profile=None, min_length=None, max_l
     if hook_paper is not None:
         if not isinstance(hook_paper, str) or not hook_paper.strip():
             errors.append("metadata.hook_paper must be a non-empty string")
-        elif hook_paper not in titles:
-            errors.append("metadata.hook_paper does not match the paper title in the email")
+        else:
+            hook_count = titles.count(hook_paper)
+            if hook_count != 1:
+                errors.append(
+                    "metadata.hook_paper must appear exactly once as the professor-side hook title"
+                )
+    elif len(titles) > 1:
+        errors.append(
+            "multiple titled works appear in the email; set metadata.hook_paper to identify the single professor-side hook"
+        )
 
     fit_label = metadata.get("fit_label")
     if fit_label is not None and fit_label not in FIT_LABELS:
@@ -228,12 +307,12 @@ def validate_artifact(paragraphs, metadata, profile=None, min_length=None, max_l
         if is_chinese
         else len(re.findall(r"\b[\w'-]+\b", text))
     )
-    lower = min_length if min_length is not None else (250 if is_chinese else 120)
-    upper = max_length if max_length is not None else (900 if is_chinese else 420)
+    lower = min_length
+    upper = max_length
     unit = "characters" if is_chinese else "words"
-    if measured_length < lower:
+    if lower is not None and measured_length < lower:
         errors.append(f"email is too short: {measured_length} {unit}; minimum is {lower}")
-    if measured_length > upper:
+    if upper is not None and measured_length > upper:
         errors.append(f"email is too long: {measured_length} {unit}; maximum is {upper}")
 
     return errors
@@ -286,6 +365,54 @@ def run_self_test():
     )
     if not any("placeholder" in item for item in invalid_errors):
         return fail(["self-test invalid case was not rejected"])
+
+    fixed_paragraphs = [
+        "尊敬的示例教授老师：",
+        "您好！感谢您阅读来信。",
+        "我是示例大学本科生甲，计划申请2027级博士生。",
+        "您研究多智能体协同。\n其中，《示例论文》引起了我的关注。\n您的工作通过风险约束改善了协同决策。\n我希望在博士阶段继续探索安全控制。",
+        "本科期间，我学习了控制理论，并完成示例项目。",
+        "以下是我的基本情况：",
+        "学习/工作情况：本科生",
+        "核心课程/专业能力：控制理论",
+        "语言能力：暂无可补充内容",
+        "荣誉与奖项：暂无可补充内容",
+        "竞赛/资格：暂无可补充内容",
+        "科研成果：",
+        "（a）示例项目：负责数据分析，项目已完成。",
+        "（b）示例项目二：参与实验，项目已完成。",
+        "（c）示例项目三：参与复核，项目已完成。",
+        "实习经历：目前暂无相关经历。",
+        "随信附上简历。请问您是否考虑招收2027级博士生？若有机会加入，我会认真完成研究工作。",
+        "祝您工作顺利！敬盼回复！",
+        "敬颂钧安！",
+        "申请人甲",
+        "示例大学",
+    ]
+    fixed_roles = [
+        "salutation", "courtesy", "identity", "professor_hook", "personal_fit",
+        "basic_intro", "basic_academic", "basic_courses", "basic_language",
+        "basic_honors", "basic_competitions", "research_heading", "research_a",
+        "research_b", "research_c", "internship", "closing", "wishes",
+        "valediction", "signature_name", "signature_affiliation",
+    ]
+    fixed_metadata = {
+        "template_format": "fixed-long",
+        "_paragraph_roles": fixed_roles,
+        "hook_paper": "示例论文",
+        "language": "Chinese",
+        "attachments_mentioned": ["简历"],
+    }
+    fixed_errors = validate_artifact(fixed_paragraphs, fixed_metadata)
+    if fixed_errors:
+        return fail([f"self-test fixed-long case failed: {item}" for item in fixed_errors])
+
+    reordered_metadata = dict(fixed_metadata)
+    reordered_metadata["_paragraph_roles"] = list(reversed(fixed_roles))
+    reordered_errors = validate_artifact(fixed_paragraphs, reordered_metadata)
+    if not any("out of order" in item for item in reordered_errors):
+        return fail(["self-test fixed-long order violation was not rejected"])
+
     print("Generic outreach validator self-test passed.")
     return 0
 
@@ -295,8 +422,10 @@ def main():
         description="Validate a generic professor-outreach email without a bundled personal preset.",
         epilog=(
             "JSON artifacts use {'metadata': {'professor_name', 'hook_paper', "
-            "'fit_label', 'language', 'attachments_mentioned'}, 'paragraphs': "
-            "[string or {'text': string} or {'runs': [{'text': string}]}]}. "
+            "'fit_label', 'language', 'attachments_mentioned', "
+            "'template_format': 'fixed-long'}, 'paragraphs': "
+            "[string or {'role': 'salutation', 'text': string} or "
+            "{'runs': [{'text': string}], 'role': 'salutation'}]}. "
             "Profile JSON follows references/applicant_profile.md."
         ),
     )

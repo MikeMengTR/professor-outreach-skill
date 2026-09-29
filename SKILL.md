@@ -1,101 +1,69 @@
 ---
 name: tc
-description: Research, draft, revise, and quality-check concise, evidence-grounded professor outreach emails for any applicant. Use for 套磁信、导师联系邮件、保研/直博/硕士/博士/RA/实习/访问学生/博士后申请邮件, short Chinese or English academic cold emails, adapting one applicant profile to different professors, or revising an existing outreach draft. Build each letter only from user-supplied applicant facts and current professor evidence; never rely on a bundled personal preset.
+description: Research professors and draft evidence-grounded academic outreach letters for applicants to graduate study, research, internships, visiting positions, or postdoctoral roles. Preserve the fixed letter framework and adapt only applicant- and professor-specific facts.
 ---
 
 # TC Professor Outreach
 
-Create a concise professor outreach email from a runtime applicant profile and verified target evidence. Keep the public skill free of real applicant data.
+Research the target professor, then draft the email by filling the fixed framework in `references/fixed_outreach_template.md`. The framework is the default for every applicant. Do not replace it with a free-form or one-screen email unless the user explicitly requests another format.
 
-## Protect applicant privacy
+## Privacy and factuality
 
-1. Treat applicant files, contact details, identifiers, academic records, and unpublished work as private runtime inputs.
-2. Never search the web for the applicant or place applicant details in search queries unless the user explicitly asks.
-3. Do not save applicant data inside this skill. Work from the current conversation or a user-provided file. Create a local profile or output file only when requested, and place it under an ignored path such as `profiles/` or `outputs/`.
-4. Include only information needed for the email. Omit identity numbers, home addresses, birth dates, private account credentials, and unrelated personal details. Phone or social contact is optional.
-5. Do not repeat contact details in research notes. Put confirmed contact details only in the requested email signature or artifact.
-6. Never infer, complete, or "improve" a missing applicant fact. Mark it missing and ask only when it blocks an accurate draft.
+- Use applicant facts only from the current conversation or user-provided files. Never search for the applicant or include applicant details in web queries.
+- Do not store applicant data in this skill. Save a profile only when requested, under an ignored local path.
+- Preserve exact roles, dates, outcomes, metrics, and publication/project states. Never upgrade submitted work to under review, accepted, or published.
+- Mention only confirmed attachments and contact details. Do not infer eligibility, recruiting, quota, funding, or availability.
+- Keep research citations and internal fit labels outside the email body.
 
-## Build the runtime applicant profile
+## Build the runtime profile
 
-Read `references/applicant_profile.md` whenever applicant facts are incomplete, spread across files, or intended for reuse across professors.
+Read `references/applicant_profile.md` when facts are incomplete, spread across files, or reused across targets. Extract the applicant's identity/status, target role and cycle, verified study/work facts, three strongest research or project items when available, practical experience, research interests, constraints, confirmed attachments, and signature preferences.
 
-Accept facts from chat, a CV, a draft, or another user-provided document. Normalize them into a temporary profile with:
-
-- identity and current academic/professional status;
-- target opportunity, intake/cycle, and output language;
-- two to four verified proof points with the applicant's role, methods, outcome, and exact status;
-- research interests and constraints;
-- confirmed attachments and optional contact fields.
-
-Use this source priority: explicit current instruction, supplied source document, earlier statement in the same task, then missing. When sources conflict, surface the conflict instead of choosing silently.
-
-Ask a compact follow-up only if a missing value risks identifying the wrong professor, fabricating applicant evidence, misstating the target, or claiming an attachment that is not confirmed. Otherwise draft with the strongest verified subset.
+Ask for missing facts that would otherwise leave a required framework slot empty or force an unsupported claim. Do not fill gaps with placeholders, generic achievements, or invented statements. If a section is genuinely inapplicable, confirm that with the user and retain the fixed position with concise, factual wording; do not omit it unless the user explicitly changes the framework.
 
 ## Research the professor
 
 Use current public sources for professor-specific and time-sensitive claims.
 
 1. Resolve identity using name plus institution, department, lab, homepage, or publication topics.
-2. Prefer official university and lab pages for title, affiliation, contact, directions, and explicit recruiting information.
-3. Prefer publisher pages, DOI records, arXiv, or project pages for papers. Read at least the abstract before describing a mechanism.
-4. Search recent work first, then select exactly one hook paper or one active research direction.
-5. Separate explicit recruiting evidence from inference. Never infer openings, quotas, funding, or eligibility from publication activity.
+2. Prefer official university and lab pages for title, affiliation, contact, research direction, and explicit recruiting information.
+3. Prefer publisher, DOI, proceedings, arXiv, project, or official code pages for research claims. Read an abstract or paper before describing a mechanism.
+4. Select exactly one professor-side paper or active project as the hook.
+5. Distinguish explicit recruiting evidence from inference. If none is public, say so in research notes and ask about plans without claiming an opening.
 
-Keep source links and evidence notes outside the email body.
+Keep evidence links and notes outside the email body.
 
-## Map evidence to the target
+## Map fit without changing the framework
 
-Read `references/adaptation_contract.md` before producing multiple letters or adapting an earlier letter to a new professor.
+Read `references/adaptation_contract.md` for letters to multiple professors. Select one primary and, where useful, one complementary applicant proof point for the professor-specific fit paragraph. Use the fixed research-experience section to present the applicant's confirmed items in the prescribed order.
 
-Select:
+Classify fit internally as `direct`, `adjacent`, or `exploratory`. For adjacent or exploratory fit, state the difference in research setting, name the transferable capability, and connect it to a concrete target-side question. Never alter the letter structure to hide a weak fit.
 
-- one primary applicant proof point closest to the target;
-- at most one secondary proof point that adds a distinct capability;
-- one honest fit bridge labeled internally as `direct`, `adjacent`, or `exploratory`.
+## Draft with the fixed framework
 
-For adjacent or exploratory fit, state the difference in research setting, identify the transferable method or capability, and connect it to a concrete target-side question. Do not manufacture overlap or use claims such as "highly aligned" without evidence.
+Read `references/fixed_outreach_template.md` before drafting. Treat its ordered blocks, paragraph roles, hook sentence count, required headings, and closing sequence as invariants:
 
-## Draft the email
+- Keep every block in order. Do not merge, reorder, or remove a block to shorten the letter.
+- Preserve each paragraph's sentence function and fixed opening where specified. Replace only the bracketed meaning slots with verified, target-specific facts.
+- Use exactly one professor hook and exactly four sentences in the professor-hook paragraph.
+- Include the confirmed applicant proof points and exact status labels in their designated paragraphs.
+- Keep subject options and research notes outside the email body. The body starts at the salutation and contains no URLs, citations, analysis, or placeholders.
+- Do not impose a one-screen or character limit. Complete the framework first; shorten wording inside its slots only when meaning and factual coverage remain intact.
+- Follow a user-requested alternative format only when the user explicitly asks to change the fixed framework.
 
-Read `references/short_email_pattern.md` before drafting or revising.
-
-Default to a one-screen email with:
-
-- one verified professor hook;
-- no more than two applicant proof points;
-- one evidence-based fit bridge;
-- only confirmed attachments;
-- one low-friction ask.
-
-For Chinese, normally target 350-650 Chinese characters excluding the signature. For English, normally target 180-300 words excluding the signature. Follow an explicit user length or tone request over these defaults.
-
-Preserve exact publication and project states such as in preparation, submitted, under review, accepted, or published. Keep detailed biography, course lists, awards, and methods in the CV unless directly relevant.
+Use the requested language. For English or another language, preserve the same block order and sentence functions in natural language rather than translating Chinese wording literally.
 
 ## Deliver
 
-Return, unless the user requests only the email:
+Unless the user asks for only the email, return:
 
 1. a compact identity and recruiting note with source links;
-2. the selected hook, evidence level, and fit label;
-3. two or three subject options;
-4. the final email body.
+2. the selected hook and evidence level;
+3. the fit label and selected applicant proof points;
+4. two or three subject options;
+5. the complete fixed-framework email body.
 
-Use the requested language. Do not place citations, source markers, analysis, or placeholders inside the email body.
-
-Create a DOCX only when requested or when revising an existing Word artifact. For DOCX, use restrained A4 business-email formatting and render every page for visual QA before delivery.
-
-## Validate
-
-Before delivery, check names, target cycle, role, paper title, applicant claims, status labels, attachments, contact details, and current date against their sources.
-
-For a structured JSON or DOCX artifact, run:
-
-```bash
-python -B scripts/validate_outreach.py <artifact> --profile <profile.local.json>
-```
-
-The profile is optional when the user did not request a saved profile. Run `python -B scripts/validate_outreach.py --help` for the generic JSON contract.
+Before delivery, check every body block against the ordered role list in the reference; revise any draft that merged, omitted, or reordered a block. For a structured JSON artifact, set `metadata.template_format` to `fixed-long` and assign the framework `role` to each paragraph before running `scripts/validate_outreach.py`. Keep the private applicant profile outside the public skill directory.
 
 Before publishing or sharing this skill directory, run:
 
@@ -103,4 +71,4 @@ Before publishing or sharing this skill directory, run:
 python -B scripts/audit_privacy.py .
 ```
 
-Add known private terms with repeated `--deny-term` arguments when auditing a previously personalized copy. Do not publish while the audit reports findings.
+Do not publish while the audit reports findings.
