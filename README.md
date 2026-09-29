@@ -1,50 +1,76 @@
-# TC Professor Outreach Skill
+# TC 导师套磁 Skill
 
-A reusable Codex skill for researching professors and drafting concise, evidence-grounded academic outreach emails for different applicants.
+**TC** 是一个面向 Codex 的通用导师套磁技能。它根据申请人提供的个人经历和目标导师的公开资料，核验研究方向与招生信息，梳理申请人与导师课题之间的联系，并起草简洁、准确的中文或英文套磁邮件。
 
-## What it does
+本项目适用于保研、直博、硕士、博士、科研助理（RA）、实习、访问学生及博士后等学术申请场景，可服务于不同背景的申请人。
 
-- Builds a temporary applicant profile from information supplied in the current task.
-- Verifies the professor's identity, research, and any explicit recruiting information using current public sources.
-- Selects one research hook and maps up to two applicant proof points to it.
-- Drafts a concise Chinese or English email, preserving exact project and publication status.
-- Keeps source notes outside the email body and minimizes personal information.
+## 功能
 
-The skill includes no prefilled applicant profile. Applicant information should be provided at runtime and is not saved unless requested.
+- **整理申请人资料：** 从当前对话或用户提供的简历、草稿中提取必要信息；保留经历中的实际分工、结果和准确状态。
+- **核验导师信息：** 根据姓名与学校、院系、实验室或主页确认导师身份，优先参考学校、实验室和论文等公开来源。
+- **核实招生情况：** 区分导师明确公开的招生信息与推测；没有可靠信息时如实说明。
+- **建立研究匹配：** 选择一个相关研究方向或论文，结合一至两个有依据的申请人经历，说明直接或可迁移的联系。
+- **撰写邮件：** 默认生成简洁的一屏邮件，支持中文和英文，并提供研究核验说明、邮件主题建议和正文。
+- **保护申请人信息：** 不依赖内置个人档案，不会为了搜索导师而搜索申请人的个人信息；未经确认，不声称已附上材料。
 
-## Install
+## 使用方法
 
-Copy the `tc` directory into your Codex skills directory, for example:
+在 Codex 中通过 **`$tc`** 调用。提供导师姓名及所属学校、院系、实验室或主页；如果附有简历或经历说明，TC 会优先从中整理申请人资料。
 
-```text
-~/.codex/skills/tc/
-```
-
-Then invoke it in Codex with `$tc`.
-
-## Example
+示例：
 
 ```text
-$tc Use the CV I attached to build my applicant profile. Research Professor X at University Y, verify current recruiting information, and draft a concise Chinese email for 2027 direct-PhD admission. Mention only my confirmed CV attachment.
+$tc 请根据我附上的简历整理申请人经历。请核验某大学某院系张老师的研究方向和公开招生信息，结合我的相关项目，起草一封申请2027级直博的中文套磁邮件。随信仅确认附上个人简历。
 ```
 
-## Included references and scripts
+如果缺少的信息会影响导师身份判断、申请目标或邮件中的事实准确性，TC 会先询问必要问题；其他情况下会基于已确认的信息起草，并避免补造缺失经历。
 
-- `references/applicant_profile.md` — runtime profile and factuality rules
-- `references/adaptation_contract.md` — rules for adapting one profile to multiple professors
-- `references/short_email_pattern.md` — email structure and writing guidance
-- `scripts/validate_outreach.py` — checks structured email artifacts and applicant claims
-- `scripts/audit_privacy.py` — scans a skill directory for likely private data before sharing
+## 安装
 
-Run the checks from this directory:
+将本仓库内容放入 Codex 的技能目录，并保留 `SKILL.md`、`agents`、`references` 和 `scripts` 的相对位置。
+
+常见目录示例：
+
+```text
+macOS / Linux: ~/.codex/skills/tc/
+Windows:       %USERPROFILE%\.codex\skills\tc\
+```
+
+重启或刷新 Codex 后，在对话中输入 **`$tc`** 调用。
+
+## 隐私与事实边界
+
+- 仓库中不包含预置申请人档案。申请人资料默认只在当前任务中使用；只有用户明确要求时才保存。
+- 只使用撰写邮件所需的个人信息；不会要求无关的身份证号、家庭住址、出生日期或账号凭证。
+- 未经用户确认，不把“已投稿”写成“审稿中”“已录用”或“已发表”，也不声称存在未确认的附件、推荐关系、招生名额或申请资格。
+- 导师研究与招生信息可能变化。涉及导师身份、当前研究和招生安排时，应根据当时可用的公开来源核验，并将来源说明放在邮件正文之外。
+- 默认邮件长度和结构可按用户明确提出的语言、篇幅或格式要求调整。
+
+## 项目结构
+
+```text
+SKILL.md                         技能主流程与质量要求
+agents/openai.yaml               Codex 技能选择器名称与简介
+references/applicant_profile.md  申请人资料整理与事实核对
+references/adaptation_contract.md 跨导师复用时的稳定事实与适配规则
+references/short_email_pattern.md 中英文邮件结构与写作规范
+scripts/validate_outreach.py     结构化邮件及事实约束校验
+scripts/audit_privacy.py         发布前隐私检查
+```
+
+## 本地检查
+
+在仓库根目录运行：
 
 ```bash
 python -B scripts/audit_privacy.py .
 python -B scripts/validate_outreach.py --help
 ```
 
-## 中文简介
+## 许可证
 
-这是一个通用的 Codex 导师套磁技能：根据当前任务中提供的申请人资料，核验导师身份、研究方向和公开招生信息，选择一个有依据的研究切入点，并生成简洁、克制的中文或英文套磁邮件。技能目录不包含预置个人档案；申请人信息默认只在当前任务中使用，只有用户明确要求时才保存。
+当前仓库尚未指定开源许可证。仓库公开并不自动授予他人复制、修改或再发布的许可。
 
-安装时将整个 `tc` 文件夹复制到 `~/.codex/skills/tc/`，之后在 Codex 中使用 `$tc` 调用。
+## English summary
+
+TC is a general-purpose Codex skill for researching professors and drafting concise, evidence-grounded academic outreach emails. It supports multiple applicants and academic opportunities, keeps applicant facts private by default, and distinguishes confirmed recruiting information from inference.
