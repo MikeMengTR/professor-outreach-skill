@@ -1,4 +1,4 @@
 interface:
   display_name: "TC 通用套磁"
-  short_description: "核验导师信息，按固定框架撰写中英文套磁信"
-  default_prompt: "Use $tc to build a private applicant profile, research the professor, and draft an evidence-grounded outreach letter following the fixed template."
+  short_description: "核验导师信息，撰写简洁、具体的中英文套磁信"
+  default_prompt: "Use $tc to build a private applicant profile, research the professor, and draft a concise evidence-grounded outreach email."

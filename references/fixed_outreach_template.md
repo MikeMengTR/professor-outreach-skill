@@ -1,6 +1,6 @@
 # Fixed Academic Outreach Letter Framework
 
-Use this framework for every default Chinese academic outreach letter. The blocks and their order are fixed. Replace only the information slots with verified facts; do not rewrite the whole letter in a new structure.
+Use this optional framework only when the user explicitly requests a long-form self-recommendation letter or this fixed format. The blocks and their order are fixed. For ordinary professor outreach, use `references/short_email_pattern.md` instead.
 
 The framework abstracts the original long-form self-recommendation format. It must not contain any particular applicant's name, profile, projects, or fixed personal claims.
 

@@ -4,19 +4,17 @@ Build this profile only from information supplied for the current task. Do not i
 
 ## Intake behavior
 
-If the user supplies a CV, draft, or profile, extract all relevant framework fields first. Ask only about missing or ambiguous facts that would otherwise leave a fixed section unsupported or empty.
+If the user supplies a CV, draft, or profile, extract the facts most relevant to the target email. Ask only about missing or conflicting details that could cause an inaccurate claim or change the requested opportunity.
 
-If no background is supplied, request this bundle in one compact prompt:
+If no background is supplied, request a compact bundle:
 
-- preferred name and current education/work status and affiliation;
+- preferred name, current status, and affiliation;
 - target role and cycle;
-- up to three research or project experiences, with exact role, contribution, outcome, and status;
-- practical, internship, or work experience, or confirmation that there is none to include;
-- available academic/work record, relevant courses or capabilities, language evidence, honors, and competition/qualification facts;
-- research interests and target constraints;
-- confirmed attachments, desired language, and signature preferences.
+- one to three relevant research/project experiences, including actual role, contribution, outcome, and exact status;
+- research interests or constraints;
+- confirmed attachments and signature preferences.
 
-Do not require GPA, rank, phone, social contact, demographic data, or a full CV. These facts are optional. Keep the five basic-information lines in the fixed template. If a category is private, absent, or inapplicable, ask whether the user confirms there is nothing to include or prefers a factual non-disclosure wording on that line. Ask whether there is practical experience to include; when the user confirms there is none, keep the practical-experience paragraph and say so briefly. Do not invent a value or print a placeholder.
+Do not require a full CV, GPA, rank, courses, awards, internship, phone, social contact, or demographic data. Include these only if supplied and useful for the target. Do not invent missing values or imply that an unsupplied experience does not exist.
 
 ## Normalized fields
 
@@ -34,13 +32,6 @@ Use this structure internally. Save it only when the user requests a reusable pr
     "language": "[Chinese or English]"
   },
   "research_interests": ["[interest]"],
-  "basic_information": {
-    "academic_or_work_record": "[verified facts or user-approved omission]",
-    "courses_or_professional_capabilities": "[verified facts or user-approved omission]",
-    "language": "[verified facts or user-approved omission]",
-    "honors": "[verified facts or user-approved omission]",
-    "competitions_or_qualifications": "[verified facts or user-approved omission]"
-  },
   "proof_points": [
     {
       "id": "proof-1",
@@ -52,7 +43,6 @@ Use this structure internally. Save it only when the user requests a reusable pr
       "source": "[chat, CV section, supplied document, or URL]"
     }
   ],
-  "practical_experience": ["[verified internship, work, or practical experience]"],
   "attachments_confirmed": ["[exact filename or attachment type]"],
   "contact": {
     "email": "[optional]",
@@ -74,7 +64,7 @@ For each claim, retain its source and exact status:
 4. Participation, leadership, and first-author status are distinct roles.
 5. If sources conflict, surface the conflict and ask which is current.
 6. Do not derive rank, GPA conversions, authorship, venue status, dates, awards, or attachment presence.
-7. Keep research/project entries in the user's supplied order unless the user asks to reorder them.
+7. Keep proof points in the user's supplied order unless the user asks to reorder them.
 
 ## Reuse and storage
 

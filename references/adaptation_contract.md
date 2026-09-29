@@ -12,10 +12,10 @@ Unless the user supplies a correction, preserve:
 - target opportunity and cycle;
 - attachment truth;
 - contact and formatting preferences;
-- fixed paragraph order, sentence functions, headings, and signature layout;
+- user-specified format, wording, disclosure, and signature preferences;
 - explicit wording or disclosure constraints.
 
-Stable means factually invariant, not necessarily copied word for word. Rephrase only to improve fit, clarity, or language while preserving meaning and claim strength.
+Stable means factually invariant, not necessarily copied word for word. Rephrase only to improve fit, clarity, or language while preserving meaning and claim strength. The default short email may organize these facts naturally; use the long fixed framework only when requested.
 
 ## Adapt per professor
 
@@ -36,7 +36,7 @@ Do not carry a paper, lab name, topic, recruiting claim, or salutation from one 
 1. List each target's verified research needs or questions.
 2. Score each applicant proof point qualitatively for problem overlap, method transfer, and demonstrated outcome.
 3. Select one primary proof and at most one complementary proof.
-4. Keep all confirmed research/project entries in the fixed framework's dedicated evidence section, in the applicant's supplied order. The one-or-two selection above controls the fit paragraph only; it does not delete the other confirmed entries.
+4. Mention only the one or two selected proofs in the short email. Keep other confirmed work in the private profile or CV unless the user asks to include it.
 5. Choose `direct` only when the applicant has worked on substantially the same problem or method.
 6. Choose `adjacent` when a demonstrated method transfers across domains.
 7. Choose `exploratory` when evidence supports potential but not prior overlap.
@@ -47,7 +47,7 @@ Do not carry a paper, lab name, topic, recruiting claim, or salutation from one 
 Before delivering a set of letters:
 
 - compare every applicant metric and status across the set;
-- confirm that every email preserves the fixed block order and sentence roles;
+- confirm that every email follows the user's requested format and remains concise by default;
 - verify each salutation, paper title, lab name, and recruiting statement independently;
 - confirm that each letter uses only its own target evidence;
 - vary the bridge only where the evidence differs;

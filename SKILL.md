@@ -1,11 +1,11 @@
 ---
 name: tc
-description: Research professors and draft evidence-grounded academic outreach letters for applicants to graduate study, research, internships, visiting positions, or postdoctoral roles. Preserve the fixed letter framework and adapt only applicant- and professor-specific facts.
+description: Research professors and draft concise, evidence-grounded academic outreach emails for graduate study, research, internships, visiting positions, and postdoctoral roles. Use for 套磁信、导师联系邮件、保研/直博/硕博/RA/实习/访问学生/博士后邮件. Default to a concise Chinese or English email; use the long fixed framework only when explicitly requested.
 ---
 
 # TC Professor Outreach
 
-Research the target professor, then draft the email by filling the fixed framework in `references/fixed_outreach_template.md`. The framework is the default for every applicant. Do not replace it with a free-form or one-screen email unless the user explicitly requests another format.
+Create a concise professor outreach email from user-provided applicant facts and current target evidence. Keep real applicant details out of the public skill files.
 
 ## Privacy and factuality
 
@@ -17,9 +17,9 @@ Research the target professor, then draft the email by filling the fixed framewo
 
 ## Build the runtime profile
 
-Read `references/applicant_profile.md` when facts are incomplete, spread across files, or reused across targets. Extract the applicant's identity/status, target role and cycle, verified study/work facts, three strongest research or project items when available, practical experience, research interests, constraints, confirmed attachments, and signature preferences.
+Read `references/applicant_profile.md` when facts are incomplete, spread across files, or reused across targets. Extract identity/status, target role and cycle, two to four verified proof points, research interests, constraints, confirmed attachments, and signature preferences.
 
-Ask for missing facts that would otherwise leave a required framework slot empty or force an unsupported claim. Do not fill gaps with placeholders, generic achievements, or invented statements. If a section is genuinely inapplicable, confirm that with the user and retain the fixed position with concise, factual wording; do not omit it unless the user explicitly changes the framework.
+Ask only about missing facts that could make the email inaccurate or materially change its purpose. Do not require a full CV, GPA, rank, awards, internships, phone, or a long project list. Never invent missing information.
 
 ## Research the professor
 
@@ -33,27 +33,29 @@ Use current public sources for professor-specific and time-sensitive claims.
 
 Keep evidence links and notes outside the email body.
 
-## Map fit without changing the framework
+## Map fit
 
-Read `references/adaptation_contract.md` for letters to multiple professors. Select one primary and, where useful, one complementary applicant proof point for the professor-specific fit paragraph. Use the fixed research-experience section to present the applicant's confirmed items in the prescribed order.
+Read `references/adaptation_contract.md` when adapting letters across professors. Select one primary and at most one complementary applicant proof point for the email. Classify fit internally as `direct`, `adjacent`, or `exploratory`.
 
-Classify fit internally as `direct`, `adjacent`, or `exploratory`. For adjacent or exploratory fit, state the difference in research setting, name the transferable capability, and connect it to a concrete target-side question. Never alter the letter structure to hide a weak fit.
+For adjacent or exploratory fit, state the difference in research setting, identify the transferable capability, and connect it to a concrete target-side question. Do not manufacture overlap or inflate the applicant's experience.
 
-## Draft with the fixed framework
+## Draft the email
 
-Read `references/fixed_outreach_template.md` before drafting. Treat its ordered blocks, paragraph roles, hook sentence count, required headings, and closing sequence as invariants:
+Read `references/short_email_pattern.md`. The default is a concise, one-screen email with:
 
-- Keep every block in order. Do not merge, reorder, or remove a block to shorten the letter.
-- Preserve each paragraph's sentence function and fixed opening where specified. Replace only the bracketed meaning slots with verified, target-specific facts.
-- Use exactly one professor hook and exactly four sentences in the professor-hook paragraph.
-- Include the confirmed applicant proof points and exact status labels in their designated paragraphs.
-- Keep subject options and research notes outside the email body. The body starts at the salutation and contains no URLs, citations, analysis, or placeholders.
-- Do not impose a one-screen or character limit. Complete the framework first; shorten wording inside its slots only when meaning and factual coverage remain intact.
-- Follow a user-requested alternative format only when the user explicitly asks to change the fixed framework.
+- one verified professor hook;
+- one or two relevant applicant proof points;
+- one honest, evidence-based fit bridge;
+- only confirmed attachments;
+- one low-friction ask.
 
-Use the requested language. For English or another language, preserve the same block order and sentence functions in natural language rather than translating Chinese wording literally.
+For Chinese, normally target 350–650 Chinese characters excluding the signature. For English, normally target 180–300 words excluding the signature. Follow an explicit user length or tone request when supplied.
 
-## Deliver
+Use a natural order that serves the case: salutation and purpose, applicant identity and evidence, professor direction and hook, fit bridge, attachment and ask, closing and signature. Do not force unrelated CV sections into the email. Preserve exact publication and project states. Mention detailed courses, awards, methods, internships, or additional projects only when directly relevant.
+
+The long format in `references/fixed_outreach_template.md` is optional. Use it only when the user explicitly asks for a long-form self-recommendation letter, a full CV-style letter, or that fixed framework. If requested, follow it exactly and ask about any missing required fields before drafting.
+
+## Deliver and check
 
 Unless the user asks for only the email, return:
 
@@ -61,9 +63,11 @@ Unless the user asks for only the email, return:
 2. the selected hook and evidence level;
 3. the fit label and selected applicant proof points;
 4. two or three subject options;
-5. the complete fixed-framework email body.
+5. the concise email body.
 
-Before delivery, check every body block against the ordered role list in the reference; revise any draft that merged, omitted, or reordered a block. For a structured JSON artifact, set `metadata.template_format` to `fixed-long` and assign the framework `role` to each paragraph before running `scripts/validate_outreach.py`. Keep the private applicant profile outside the public skill directory.
+Keep citations, source URLs, research notes, fit labels, and placeholders outside the email body. Before delivery, verify names, target cycle, roles, hook title and claims, applicant facts, status labels, attachment, and signature against their sources.
+
+For a structured JSON artifact, use `scripts/validate_outreach.py`; add `metadata.template_format: fixed-long` and paragraph roles only when using the optional long framework. Keep the private applicant profile outside the public skill directory.
 
 Before publishing or sharing this skill directory, run:
 
